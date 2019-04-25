@@ -6,4 +6,5 @@ Personally collected web learning documents
 + React: [https://segmentfault.com/a/1190000007790578](https://segmentfault.com/a/1190000007790578)
 + MDN :[https://developer.mozilla.org/zh-CN/](https://developer.mozilla.org/zh-CN/)
 + Knockout : [http://www.aizhengli.com/knockoutjs/50/knockout.html](http://www.aizhengli.com/knockoutjs/50/knockout.html)
+            3.x高版本[https://www.cnblogs.com/smallprogram/p/5976954.html](https://www.cnblogs.com/smallprogram/p/5976954.html)
 + Sass : [https://www.sasscss.com/docs/](https://www.sasscss.com/docs/)
