@@ -1,4 +1,4 @@
-# WebLearningDoc
+# Web Learning Doc
 Personally collected web learning documents
 
 + JavaScript 教程: [https://wangdoc.com/javascript/types/array.html](https://wangdoc.com/javascript/types/array.html)
