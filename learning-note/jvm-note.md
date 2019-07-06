@@ -138,4 +138,51 @@ Java中的**volatile**关键字提供了一个功能，那就是被其修饰的�
 
 但是**synchronized**是比较影响性能的，虽然编译器提供了很多锁优化技术，但是也不建议过度使用。
 
+
+### Java变量的读写
+**Java通过几种原子操作完成工作内存和主内存的交互：**
+
+lock：作用于主内存，把变量标识为线程独占状态。  
+unlock：作用于主内存，解除独占状态。  
+read：作用主内存，把一个变量的值从主内存传输到线程的工作内存。  
+load：作用于工作内存，把read操作传过来的变量值放入工作内存的变量副本中。  
+use：作用工作内存，把工作内存当中的一个变量值传给执行引擎。  
+assign：作用工作内存，把一个从执行引擎接收到的值赋值给工作内存的变量。  
+store：作用于工作内存的变量，把工作内存的一个变量的值传送到主内存中。  
+write：作用于主内存的变量，把store操作传来的变量的值放入主内存的变量中。
+
+**volatile如何保持内存可见性volatile的特殊规则就是**：
+
+read、load、use动作必须连续出现。   
+assign、store、write动作必须连续出现。
+
+**volatile底层的实现机制**  
+
+如果把加入volatile关键字的代码和未加入volatile关键字的代码都生成汇编代码，会发现加入volatile关键字的代码会多出一个lock前缀指令。
+lock前缀指令实际相当于一个内存屏障，内存屏障提供了以下功能：
+
+1 . 重排序时不能把后面的指令重排序到内存屏障之前的位置  
+2 . 使得本CPU的Cache写入内存  
+3 . 写入动作也会引起别的CPU或者别的内核无效化其Cache，相当于让新写入的值对别的线程可见。
+
+**重排序举例：**
+
+    instance = new Singleton();
+
+它并不是一个原子操作。事实上，它可以”抽象“为下面几条JVM指令：
+
+    memory = allocate();//1：分配对象的内存空间
+    
+    initInstance(memory);//2：初始化对象
+    
+    instance = memory;//3：设置instance指向刚分配的内存地址
+
+上面操作2依赖于操作1，但是操作3并不依赖于操作2，所以JVM可以以“优化”为目的对它们进行重排序，经过重排序后如下：
+
+    memory = allocate();//1：分配对象的内存空间
+    instance = memory;//3：设置instance指向刚分配的内存地址（此时对象还未初始化）
+    ctorInstance(memory);//2：初始化对象
+
+可以看到指令重排之后，操作 3 排在了操作 2 之前，即引用instance指向内存memory时，这段崭新的内存还没有初始化——即，引用instance指向了一个"被部分初始化的对象"。此时，如果另一个线程调用getInstance方法，由于instance已经指向了一块内存空间，从而if条件判为false，方法返回instance引用，用户得到了没有完成初始化的“半个”单例。
+
 **JMM**详见：[https://juejin.im/post/5d1ad06b6fb9a07f021a19e8](https://juejin.im/post/5d1ad06b6fb9a07f021a19e8 "https://juejin.im/post/5d1ad06b6fb9a07f021a19e8")
