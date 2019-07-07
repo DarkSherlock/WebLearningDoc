@@ -162,4 +162,28 @@ public class Test {
         System.arraycopy(temp, 0, arr, low, temp.length);
     }
 }
+
+  @org.junit.Test
+    public void testBinarySearch(){
+        mergeSort();
+        System.out.println("36的索引="+binarySearch(arr,36));
+        System.out.println("999的索引="+binarySearch(arr,999));
+    }
+    public int binarySearch(int[] arr, int searchValue) {
+
+        int low = 0;
+        int high = arr.length - 1;
+        while (low <= high) {
+            int mid = ( high + low) / 2;
+            if (arr[mid] == searchValue){
+                return mid;
+            }else if (arr[mid] > searchValue){
+                high = mid - 1;
+            }else {
+                low = mid + 1;
+            }
+        }
+
+        return -1;
+    }
 ```
