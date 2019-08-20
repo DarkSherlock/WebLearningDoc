@@ -1,0 +1,11 @@
+#### Android Studio 实用插件列表
+- GsonFormat
+- ButterKnife Zelezny
+- Parcelable code generator
+- Lifecycle Sorter
+- CodeGlance
+- JsonOnlineViewer
+- Android Styler
+- ECTranslation
+- .ignore
+- Sexy Editor
