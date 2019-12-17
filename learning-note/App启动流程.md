@@ -1,3 +1,9 @@
+**参考以下文章**：
+
+- [【凯子哥带你学Framework】Activity启动过程全解析](https://blog.csdn.net/zhaokaiqiang1992/article/details/49428287)
+
+- [Android Activity启动流程源码全解析（2）](https://zhuanlan.zhihu.com/p/23109683)
+
 android系统开机，Linux <init>进程启动后从init进程fork出来zygote进程，zygote开启的时候，会调用ZygoteInit.main()进行初始化，然后开始fork system_server进程。
 
     public static void main(String argv[]) {
