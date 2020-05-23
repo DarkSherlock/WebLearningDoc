@@ -1,4 +1,4 @@
-## HTTP ##
+## TCP ##
 三次握手的过程：
 
 
@@ -37,11 +37,22 @@ IP 192.168.1.116.3337 > 192.168.1.123.7788: ack 1739326487,ack 1
 ##  HTTPS ##
 
 ![https请求过程](https://upload-images.jianshu.io/upload_images/449687-2c0fe3a7fbd6b3ad.png?imageMogr2/auto-orient/strip|imageView2/2/format/webp)
+客户端发送 client_hello，包含一个随机数 random1。 
 
+服务端回复 server_hello，包含一个随机数 random2，携带了证书公钥 P。 
+
+客户端接收到 random2 之后就能够生成 premaster_secrect （对称加密的密钥）以及 master_secrect（用premaster_secret加密后的数据）。 
+
+客户端使用证书公钥 P 将 premaster_secrect 加密后发送给服务器 (用公钥P对premaster_secret加密)。 
+
+服务端使用私钥解密得到 premaster_secrect。又由于服务端之前就收到了随机数 1，所以服务端根据相同的生成算法，在相同的输入参数下，求出了相同的 master secrect。
+![https://mp.weixin.qq.com/s/E75toyRukUHEtt34-snEgQ](https://mp.weixin.qq.com/s/E75toyRukUHEtt34-snEgQ)
+![https://www.jianshu.com/p/80d6f39fd40b](https://www.jianshu.com/p/80d6f39fd40b)
 服务器向CA申请证书，CA用自己的私钥加密服务器的公钥然后再用hash算法生成一个签名。客户端发起请求的时候，服务器下发CA签发的证书，证书包含加密过后的服务器公钥、域名、证书签名、证书签名使用的hash算法。
 客户端拿到证书后，使用客户端内置的CA证书的公钥去解密证书，然后获取到签名和hash算法，然后客户端也用这个hash算法去计算下证书内容是否和证书的签名一致，不一致的话代表被中间人篡改过，通信就结束;一致的话就代表证书里的公钥是服务器下发的公钥,然后客户端会生成一个随机数（对称加密算法的key)并且携带本地支持的对称加密算法有哪一些，然后用服务器公钥加密发送给服务器，服务器接收到后用自己的私钥解密，然后选择一套对称加密算法后然后告知客户端，后面我们就用这个随机数和这套对称加密算法来加密数据吧。
 
 中间人攻击：
 
 - 中间人可以拦截服务端下发的证书，它如果自己生成一对公钥和私钥，用自己的公钥替换服务器的公钥，这样他需要重新加密证书，但是没有CA的私钥所以无法重新加密，这就行不通了。它也可以向CA申请证书，然后替换掉服务端的证书下发给客户端，但是客户端拿到证书后会比较证书里的域名是不是自己要请求的域名，如果不是也会报出警告，所以客户端也能感知到证书被替换了）
+
 
