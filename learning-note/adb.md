@@ -4,3 +4,4 @@
 + view activities info: adb -s emulator-5556 activity activities
 + dump heap info: adb -s emulator-5554 shell am dumpheap {processName}  /data/local/tmp/rooms.hprof  
   then pull rooms.hprof into pc
++ view application's version info: adb shell dumpsys package {processName}
